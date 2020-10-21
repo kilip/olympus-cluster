@@ -13,3 +13,8 @@ tasks:
       --repository=${GITHUB_REPO} \
       --branch=${GITHUB_BRANCH} \
       --path=${GOTK_PATH}
+
+  fetch-kubeconfig:
+    desc: fetch kubeconfig from server
+    cmds:
+      - scp {{.server}}:/home/${USER}/.kube/config kubeconfig
