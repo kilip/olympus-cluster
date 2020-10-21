@@ -7,3 +7,4 @@ bases:
 patchesStrategicMerge:
 - networking/metallb-config.yaml
 - networking/ingress-nginx.yaml
+- system/rancher.yaml
