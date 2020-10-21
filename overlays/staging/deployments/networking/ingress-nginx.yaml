@@ -10,5 +10,5 @@ spec:
         type: LoadBalancer
         loadBalancerIP: 10.0.60.21
         externalTrafficPolicy: Local
-    nodeSelector:
-      kubernetes.io/hostname: hera-dev
+      nodeSelector:
+        kubernetes.io/hostname: hera-dev
