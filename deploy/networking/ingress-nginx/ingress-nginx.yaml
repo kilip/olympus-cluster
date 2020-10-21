@@ -26,6 +26,8 @@ spec:
       interval: 1m
   values:
     controller:
+      nodeSelector:
+        kubernetes.io/hostname: iris
       ingressClass: nginx
       replicaCount: 1
       service:
