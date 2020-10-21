@@ -18,3 +18,8 @@ tasks:
     desc: fetch kubeconfig from server
     cmds:
       - scp {{.server}}:/home/${USER}/.kube/config kubeconfig
+
+  reconcile:
+    desc: reconcile git source
+    cmds:
+    - gotk reconcile source git gotk-system
