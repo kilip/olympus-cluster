@@ -7,4 +7,6 @@ spec:
   values:
     controller:
       service:
+        type: LoadBalancer
         loadBalancerIP: 10.0.60.21
+        externalTrafficPolicy: Local
