@@ -5,4 +5,4 @@ metadata:
   namespace: cattle-system
 spec:
   values:
-    hostname: rancher.dev.itstoni.com
+    hostname: rancher-dev.itstoni.com
