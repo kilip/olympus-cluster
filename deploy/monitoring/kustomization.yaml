@@ -1,2 +1,5 @@
+resources:
+- namespace.yaml
+
 bases:
 - ./kube-prometheus-stack
