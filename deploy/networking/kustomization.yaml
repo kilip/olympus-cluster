@@ -2,3 +2,4 @@ resources:
 - namespace.yaml
 - metallb/metallb-config.yaml
 - metallb/metallb.yaml
+- ingress-nginx/ingress-nginx.yaml
