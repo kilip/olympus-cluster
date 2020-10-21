@@ -3,6 +3,7 @@ kind: Kustomization
 bases:
 - ../../../deploy/networking
 - ../../../deploy/system
+- ../../../deploy/monitoring
 
 patchesStrategicMerge:
 - networking/metallb-config.yaml
