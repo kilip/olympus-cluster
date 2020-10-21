@@ -17,7 +17,7 @@ spec:
   interval: 5m
   chart:
     spec:
-      chart: rancher-stable
+      chart: rancher
       version: 2.4.8
       sourceRef:
         kind: HelmRepository
