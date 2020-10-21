@@ -30,7 +30,7 @@ spec:
       replicaCount: 1
       service:
         type: LoadBalancer
-        loadBalancerIP: 10.60.0.21
+        loadBalancerIP: 10.0.10.21
         externalTrafficPolicy: Local
       publishService:
         enabled: true
