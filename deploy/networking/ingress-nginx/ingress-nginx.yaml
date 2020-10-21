@@ -27,7 +27,7 @@ spec:
   values:
     controller:
       nodeSelector:
-        kubernetes.io/hostname: iris
+        kubernetes.io/hostname: aion
       ingressClass: nginx
       replicaCount: 1
       service:
