@@ -1,0 +1,15 @@
+version: "3"
+
+dotenv:
+- .env
+
+tasks:
+  bootstrap:
+    desc: bootstrap cluster with gotk
+    cmds:
+    - |
+      gotk bootstrap github \
+      --owner=${GITHUB_USER} \
+      --repository=${GITHUB_REPO} \
+      --branch=${GITHUB_BRANCH} \
+      --path=${GOTK_PATH}
