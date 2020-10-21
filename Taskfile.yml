@@ -17,7 +17,8 @@ tasks:
   fetch-kubeconfig:
     desc: fetch kubeconfig from server
     cmds:
-      - scp {{.server}}:/home/${USER}/.kube/config kubeconfig
+      - scp {{.server}}:/etc/rancher/k3s/k3s.yaml kubeconfig
+      - "sed -i 's|127.0.0.1|{{.server}}|g' kubeconfig"
 
   reconcile:
     desc: reconcile git source
