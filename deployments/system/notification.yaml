@@ -27,3 +27,5 @@ spec:
   eventSources:
     - kind: HelmRepository
       name: '*'
+    - kind: GitRepository
+      name: '*'
