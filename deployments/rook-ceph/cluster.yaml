@@ -47,16 +47,16 @@ spec:
     # serve the dashboard using SSL
     # ssl: true
   # enable prometheus alerting for cluster
-  monitoring:
+  #monitoring:
     # requires Prometheus to be pre-installed
-    enabled: true
+  #  enabled: true
     # namespace to deploy prometheusRule in. If empty, namespace of the cluster will be used.
     # Recommended:
     # If you have a single rook-ceph cluster, set the rulesNamespace to the same namespace as the cluster or keep it empty.
     # If you have multiple rook-ceph clusters in the same k8s cluster, choose the same namespace (ideally, namespace with prometheus
     # deployed) to set rulesNamespace for all the clusters. Otherwise, you will get duplicate alerts with multiple alert definitions.
-    rulesNamespace: rook-ceph
-  network:
+  #  rulesNamespace: rook-ceph
+  #network:
     # enable host networking
     #provider: host
     # EXPERIMENTAL: enable the Multus network provider
