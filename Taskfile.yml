@@ -1,0 +1,26 @@
+version: "3"
+
+dotenv:
+- .env
+
+tasks:
+  bootstrap:
+    desc: bootstrap cluster with gotk
+    cmds:
+    - |
+      gotk bootstrap github \
+      --owner=${GITHUB_USER} \
+      --repository=${GITHUB_REPO} \
+      --branch=${GITHUB_BRANCH} \
+      --path=${GOTK_PATH}
+
+  fetch-kubeconfig:
+    desc: fetch kubeconfig from server
+    cmds:
+      - scp {{.server}}:/etc/rancher/k3s/k3s.yaml kubeconfig
+      - "sed -i 's|127.0.0.1|{{.server}}|g' kubeconfig"
+
+  reconcile:
+    desc: reconcile git source
+    cmds:
+    - gotk reconcile source git gotk-system
