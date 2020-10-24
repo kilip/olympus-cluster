@@ -17,14 +17,14 @@ spec:
       interval: 1m
   values:
     installCRDs: true
+    extraArgs:
+      - --dns01-recursive-nameservers=1.1.1.1:53
+      - --dns01-recursive-nameservers-only
     webhook:
       enabled: true
     #  tolerations:
     #  - key: "arm"
     #    operator: "Exists"
-      extraArgs:
-        - --dns01-recursive-nameservers=1.1.1.1:53
-        - --dns01-recursive-nameservers-only
     #tolerations:
     #- key: "arm"
     #  operator: "Exists"
