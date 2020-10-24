@@ -1,5 +1,5 @@
 ---
-apiVersion: helm.fluxcd.io/v1
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: botkube
@@ -19,8 +19,7 @@ spec:
       interval: 1m
   valuesFrom:
     - kind: Secret
-      name: slack-token
-      namespace: system
+      name: system/slack-token
       valuesKey: token
       targetPath: communications.slack.token
   values:
@@ -33,7 +32,6 @@ spec:
       slack:
         enabled: true
         channel: 'k8s'
-        token: '$BOTKUBE_SLACK_TOKEN'
         notiftype: short
     config:
       settings:
