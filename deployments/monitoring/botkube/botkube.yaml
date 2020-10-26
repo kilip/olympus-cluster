@@ -4,8 +4,6 @@ kind: HelmRelease
 metadata:
   name: botkube
   namespace: monitoring
-  annotations:
-    fluxcd.io/ignore: "false"
 spec:
   interval: 1m
   chart:
