@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: longhorn-system
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+spec:
+  interval: 1m
+  url: https://charts.longhorn.io
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: podinfo
+  namespace: default
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: longhorn
+      version: 1.0.2
+      sourceRef:
+        kind: HelmRepository
+        name: longhorn
+        namespace: longhorn-system
+      interval: 1m
+  values:
+    persistence:
+      defaultClassReplicaCount: 3
+    defaultSettings:
+      defaultReplicaCount: 3
+      createDefaultDiskLabeledNodes: true
+      #backupTarget: s3://longhorn@192.168.1.39/backups
+      #backupTargetCredentialSecret: longhorn-backup-secret
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "ingress"
+      host: "longhorn.itstoni.com"
