@@ -39,5 +39,5 @@ spec:
     ingress:
       enabled: true
       annotations:
-        kubernetes.io/ingress.class: "ingress"
+        kubernetes.io/ingress.class: "internal"
       host: "longhorn.itstoni.com"
