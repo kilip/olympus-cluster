@@ -17,7 +17,7 @@ spec:
   chart:
     spec:
       chart: botkube
-      version: v0.10.0
+      version: v0.11.0
       sourceRef:
         kind: HelmRepository
         name: botkube
@@ -41,7 +41,7 @@ spec:
         notiftype: short
     config:
       settings:
-        clustername: k8s
+        clustername: olympus
       resources:
         - name: pod                # Name of the resources e.g pod, deployment, ingress, etc. (Resource name must be in singular form)
           namespaces:
