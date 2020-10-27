@@ -1,0 +1,159 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: kube-prometheus-stack
+  namespace: monitoring
+spec:
+  interval: 1m
+  url: https://prometheus-community.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: kube-prometheus-stack
+  namespace: monitoring
+spec:
+  interval: 1m
+  chart:
+    spec:
+      chart: botkube
+      version: 10.1.2
+      sourceRef:
+        kind: HelmRepository
+        name: kube-prometheus-stack
+        namespace: monitoring
+      interval: 1m
+  values:
+    # defaultRules:
+    #   rules:
+    #     kubeApiserverAvailability: true
+    #     kubeApiserver: true
+    server:
+      resources:
+        requests:
+          memory: 1500Mi
+          cpu: 25m
+        limits:
+          memory: 2000Mi
+    prometheusOperator:
+      createCustomResource: true
+      configmapReloadImage:
+        repository: jimmidyson/configmap-reload
+        tag: v0.3.0
+    alertmanager:
+      alertmanagerSpec:
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: longhorn
+              resources:
+                requests:
+                  storage: 10Gi
+        #tolerations:
+        #- key: "arm"
+        #  operator: "Exists"
+        podMetadata:
+          annotations:
+            backup.velero.io/backup-volumes: alertmanager-kube-prometheus-stack-alertmanager-db
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "internal"
+          nginx.ingress.kubernetes.io/auth-url: "https://auth.itstoni.com/oauth2/auth"
+          nginx.ingress.kubernetes.io/auth-signin: https://auth.itstoni.com/oauth2/start
+        hosts: [alert.itstoni.com]
+        tls:
+        - hosts:
+          - alert.itstoni.com
+      config:
+        route:
+          receiver: 'slack-notifications'
+          routes:
+            - match:
+                alertname: Watchdog
+              receiver: 'null'
+            - receiver: 'pagerduty'
+              match:
+                severity: critical
+              continue: true
+            - receiver: 'slack-notifications'
+        inhibit_rules:
+        - source_match:
+            severity: 'critical'
+          target_match:
+            severity: 'warning'
+          # Apply inhibition if the alertname is the same.
+          equal: ['alertname', 'namespace']
+        templates: ["*.tmpl"]
+      templateFiles:
+        pagerduty-custom.tmpl: |-
+          {{- define "pagerduty.custom.description" -}}[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ if ne .CommonAnnotations.summary ""}}{{ .CommonAnnotations.summary }} {{ else if ne .CommonAnnotations.message ""}}{{ .CommonAnnotations.message }} {{ else if ne .CommonAnnotations.description ""}}{{ .CommonAnnotations.description }} {{ else }}{{ .CommonLabels.alertname }}{{ end }}{{- end -}}
+    nodeExporter:
+      serviceMonitor:
+        relabelings:
+        - action: replace
+          regex: (.*)
+          replacement: $1
+          sourceLabels:
+          - __meta_kubernetes_pod_node_name
+          targetLabel: kubernetes_node
+    kubelet:
+      serviceMonitor:
+        metricRelabelings:
+        - action: replace
+          sourceLabels:
+          - node
+          targetLabel: instance
+    grafana:
+      # image:
+      #   repository: grafana/grafana
+      #   tag: 7.0.4
+      # tolerations:
+      # - key: "arm"
+      #   operator: "Exists"
+      deploymentStrategy:
+        type: Recreate
+      #podAnnotations:
+      #  backup.velero.io/backup-volumes: storage
+      persistence:
+        enabled: true
+        storageClassName: "longhorn"
+        size: 5Gi
+        accessModes:
+        - ReadWriteOnce
+      env:
+        GF_EXPLORE_ENABLED: true
+        GF_DISABLE_SANITIZE_HTML: true
+        GF_PANELS_DISABLE_SANITIZE_HTML: true
+        #VAR_BLOCKY_URL: "http://blocky.default.svc.cluster.local:4000"
+      ingress:
+        enabled: true
+        annotations:
+          kubernetes.io/ingress.class: "internal"
+        hosts: [grafana.itstoni.com]
+        tls:
+        - hosts:
+          - grafana.itstoni.com
+      dashboardProviders:
+        dashboardproviders.yaml:
+          apiVersion: 1
+          providers:
+          - name: 'default'
+            orgId: 1
+            folder: ''
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
+      dashboards:
+        default:
+          nginx-dashboard:
+            url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/grafana/dashboards/nginx.json
+            datasource: Prometheus
+          uptimerobot:
+            url: https://raw.githubusercontent.com/lekpamartin/uptimerobot_exporter/master/dashboards/grafana.json
+            datasource: Prometheus
+          1-node-exporter:
+            url: https://grafana.com/api/dashboards/11074/revisions/4/download
+            datasource: Prometheus 
