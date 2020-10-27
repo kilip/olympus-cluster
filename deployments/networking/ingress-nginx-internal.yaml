@@ -41,11 +41,11 @@ spec:
         use-proxy-protocol: "false"
         proxy-body-size: "0"
         use-forwarded-headers: "true"
-      metrics:
-        enabled: true
-        serviceMonitor:
-          enabled: true
-          namespace: networking
+      #metrics:
+      #  enabled: true
+      #  serviceMonitor:
+      #    enabled: true
+      #    namespace: networking
       extraArgs:
         default-ssl-certificate: "networking/acme-crt-secret"
       affinity:
