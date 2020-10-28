@@ -32,5 +32,7 @@ spec:
   values:
     hostname: rancher.itstoni.com
     ingress:
+      extraAnnotations:
+        kubernetes.io/ingress.class: internal
       tls:
         source: secret
