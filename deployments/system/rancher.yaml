@@ -34,8 +34,3 @@ spec:
     ingress:
       tls:
         source: secret
-        
-    helm install rancher rancher-latest/rancher \
-    --namespace cattle-system \
-    --set hostname=rancher.my.org \
-    --set ingress.tls.source=secret
