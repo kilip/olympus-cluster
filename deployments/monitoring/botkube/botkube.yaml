@@ -4,7 +4,7 @@ metadata:
   name: botkube
   namespace: monitoring
 spec:
-  interval: 1m
+  interval: 5m
   url: https://infracloudio.github.io/charts
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
@@ -13,7 +13,7 @@ metadata:
   name: botkube
   namespace: monitoring
 spec:
-  interval: 1m
+  interval: 5m
   chart:
     spec:
       chart: botkube
@@ -22,7 +22,7 @@ spec:
         kind: HelmRepository
         name: botkube
         namespace: monitoring
-      interval: 1m
+      interval: 5m
   valuesFrom:
     - kind: Secret
       name: slack-token
@@ -45,17 +45,17 @@ spec:
       resources:
         - name: pod                # Name of the resources e.g pod, deployment, ingress, etc. (Resource name must be in singular form)
           namespaces:
-            include:  
+            include:
               - all
             ignore:                 # List of namespaces to be ignored (omitempty), used only with include: all
-              - rook-ceph                    # example : include [all], ignore [x,y,z] 
+              - rook-ceph                    # example : include [all], ignore [x,y,z]
               - kube-system
           events:                   # List of lifecycle events you want to receive, e.g create, update, delete, error OR all
             - create
             - delete
         - name: service
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -63,7 +63,7 @@ spec:
             - error
         - name: deployment
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -76,7 +76,7 @@ spec:
               - spec.template.spec.containers[*].image
         - name: statefulset
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -89,7 +89,7 @@ spec:
               - spec.template.spec.containers[*].image
         - name: ingress
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -97,7 +97,7 @@ spec:
             - error
         - name: node
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -105,7 +105,7 @@ spec:
             - error
         - name: namespace
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -113,7 +113,7 @@ spec:
             - error
         - name: persistentvolume
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -121,7 +121,7 @@ spec:
             - error
         - name: persistentvolumeclaim
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -129,7 +129,7 @@ spec:
             - error
         - name: secret
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -137,7 +137,7 @@ spec:
             - error
         - name: configmap
           namespaces:
-            include:  
+            include:
               - all
             ignore:
               - rook-ceph
@@ -146,7 +146,7 @@ spec:
             - error
         - name: daemonset
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -159,7 +159,7 @@ spec:
               - spec.template.spec.containers[*].image
         - name: job
           namespaces:
-            include:  
+            include:
               - all
             ignore:
               - rook-ceph
@@ -176,7 +176,7 @@ spec:
               - status.conditions[*].type
         - name: role
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -184,7 +184,7 @@ spec:
             - error
         - name: rolebinding
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
@@ -200,7 +200,7 @@ spec:
             - error
         - name: clusterrolebinding
           namespaces:
-            include:  
+            include:
               - all
           events:
             - create
